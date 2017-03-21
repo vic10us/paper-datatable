@@ -1,8 +1,9 @@
 {
   "name": "paper-datatable",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "authors": [
-    "David Mulder <david.mulder@ymail.com>"
+    "David Mulder <david.mulder@ymail.com>",
+    "Keith Hill <keith@dexs.ca>"
   ],
   "description": "Material design data table.",
   "keywords": [

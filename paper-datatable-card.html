@@ -99,7 +99,7 @@
 		<paper-material elevation="1">
 			<div class="horizontal center layout" id="topBlock">
 				<div class="flex header">
-					<span>{{header}}</span>
+					<span>[[header]]</span>
 				</div>
 				<div id="toolbar-main" class="toolbar">
 					<content select="*[toolbar-main]"></content>
@@ -108,10 +108,10 @@
 					<div class="flex selectionHeader">
 						<span>[[_numberselectedIds]]</span> item selected
 					</div>
-					<div class="toolbar" data-visible$="{{_singleSelectToolbarVisible}}">
+					<div class="toolbar" data-visible$="[[_singleSelectToolbarVisible]]">
 						<content select="*[toolbar-select-single]"></content>
 					</div>
-					<div class="toolbar" data-visible$="{{_multiSelectToolbarVisible}}">
+					<div class="toolbar" data-visible$="[[_multiSelectToolbarVisible]]">
 						<content select="*[toolbar-select-multi]"></content>
 					</div>
 					<div class="toolbar" data-visible>
@@ -251,15 +251,16 @@
 						notify: true,
 						value: []
 					},
-					_cacheUsed: {
-						type: Boolean
-					},
-					_sortDirection: {
+					sortDirection: {
 						type: String,
 						value: 'asc'
 					},
-					_sortProperty: {
-						type: String
+					sortProperty: {
+						type: String,
+						value: ''
+					},
+					_cacheUsed: {
+						type: Boolean
 					},
 					_selectedToolbarVisible: Boolean,
 					_singleSelectToolbarVisible: Boolean,
@@ -276,10 +277,10 @@
 					this._datatable.addEventListener("toggle-all", this._toggleAll.bind(this));
 					this._datatable._setPartialSelection = function(){};
 					this.set('selectedIds', []);
-					this.set('_sortProperty', this.idProperty);
+					if (this.sortProperty === '') this.set('sortProperty', this.idProperty);
 				},
 				observers: [
-					'retrieveVisibleData(dataSource, pageSize, page, _datatable, _sortDirection, _sortProperty)',
+					'retrieveVisibleData(dataSource, pageSize, page, _datatable, sortDirection, sortProperty)',
 					'_setNumberOfItems(dataSource.length)',
 					'_createCache(dataSource.queryForIds)'
 				],
@@ -346,8 +347,8 @@
 						ev.preventDefault();
 						this.firstPage();
 						console.log(ev.detail);
-						this._sortProperty = ev.detail.sort.property;
-						this._sortDirection = ev.detail.sort.direction;
+						this.sortProperty = ev.detail.sort.property;
+						this.sortDirection = ev.detail.sort.direction;
 
 						//this.retrieveVisibleData();
 					}
@@ -382,8 +383,8 @@
 						}.bind(this);
 
 						var queryArgs = [{
-							property: this._sortProperty,
-							direction: this._sortDirection
+							property: this.sortProperty,
+							direction: this.sortDirection
 						}, this.page, this.pageSize];
 
 						this._datatable.set('progress', true);
